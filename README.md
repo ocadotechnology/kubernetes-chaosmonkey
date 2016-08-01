@@ -1,5 +1,7 @@
 # kube-chaosmonkey
 
+Based on https://github.com/cheyang/kube-chaosmonkey
+
 This  kills pods to help check your environment can withstand failures by using [fabric8 chaos monkey](http://fabric8.io/guide/chaosMonkey.html) without fabric8 dependency
 
 
