@@ -14,7 +14,7 @@ api = pykube.HTTPClient(pykube.KubeConfig.from_service_account())
 
 while True:
     pods = pykube.Pod.objects(api)
-    print str(pods)
-    print str(list(pods))
+    print(str(pods))
+    print(str(list(pods)))
 
     time.sleep(KILL_FREQUENCY)
