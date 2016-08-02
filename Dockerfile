@@ -1,1 +1,3 @@
-FROM fabric8/chaos-monkey:2.2.115
+FROM python:3.5
+
+CMD ["/usr/src/app/chaos.py"]
