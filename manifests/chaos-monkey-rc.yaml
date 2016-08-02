@@ -26,12 +26,10 @@ spec:
               cpu: "1"
           env:
             - name: KUBERNETES_MASTER
-              value: "http://kubernetes"
+              value: "https://kubernetes"
             - name: KUBERNETES_NAMESPACE
               value: "default"
             - name: "CHAOS_MONKEY_INCLUDES"
-              value: "zk*,zk1*"
-            - name: "CHAOS_MONKEY_EXCLUDES"
-              value: "zk2*"
+              value: "*"
             - name: "CHAOS_MONKEY_KILL_FREQUENCY_SECONDS"
               value: "30"
