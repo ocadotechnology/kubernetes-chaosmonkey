@@ -5,7 +5,7 @@ import os
 import pykube
 import time
 
-KILL_FREQUENCY = os.environ.get('CHAOS_MONKEY_KILL_FREQUENCY_SECONDS', 300)
+KILL_FREQUENCY = int(os.environ.get('CHAOS_MONKEY_KILL_FREQUENCY_SECONDS', 300))
 LOGGER = logging.getLogger(__name__)
 
 # No error handling, if things go wrong Kubernetes will restart for us!
