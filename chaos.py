@@ -16,11 +16,7 @@ logging.basicConfig(level=logging.INFO)
 api = pykube.HTTPClient(pykube.KubeConfig.from_service_account())
 
 while True:
-    namespaces = pykube.Namespace.objects(api)
-
-    pods = []
-    for namespace in namespaces:
-        pods.extend(list(pykube.Pod.objects(api).filter(namespace=namespace.name)))
+    pods = list(pykube.Pod.objects(api).filter(namespace=''))
     pod = random.choice(pods)
     LOGGER.info("Terminating pod %s/%s", pod.namespace, pod.name)
     pod.delete()
