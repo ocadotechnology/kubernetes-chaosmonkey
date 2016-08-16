@@ -22,4 +22,4 @@ spec:
               cpu: "0.1"
           env:
             - name: "CHAOS_MONKEY_KILL_FREQUENCY_SECONDS"
-              value: "31536000"
+              value: "3600"
