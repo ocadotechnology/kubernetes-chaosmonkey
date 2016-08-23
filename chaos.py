@@ -18,8 +18,7 @@ api = pykube.HTTPClient(pykube.KubeConfig.from_service_account())
 while True:
     pods = list(pykube.Pod.objects(api).filter(namespace=''))
     pod = random.choice(pods)
-    container_name = random.choice(pod.obj['spec']['containers'])['name']
-    LOGGER.info("Terminating pod %s/%s/%s", pod.namespace, pod.name, container_name)
-    #pod.delete()
+    LOGGER.info("Terminating pod %s/%s", pod.namespace, pod.name)
+    pod.delete()
 
     time.sleep(KILL_FREQUENCY)
