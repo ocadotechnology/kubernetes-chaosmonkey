@@ -12,7 +12,7 @@ spec:
     spec:
       containers:
         - name: chaos-monkey
-          image: dk.tech.cit.lastmile.com/platform-automation/chaos-monkey:latest
+          image: registry.docker.tech.lastmile.com/platform-automation/chaos-monkey:latest
           resources:
             requests:
               memory: "32Mi"
