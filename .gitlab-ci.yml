@@ -1,0 +1,8 @@
+image: registry.docker.tech.lastmile.com/platform-automation/ubuntu:latest
+
+build:
+  tags:
+    - docker-build-v2
+  stage: build
+  script:
+    - pa-docker-build
