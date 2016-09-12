@@ -8,7 +8,7 @@ spec:
   template:
     metadata:
       labels:
-        app: chaos-monkey
+        appId: chaos-monkey
     spec:
       containers:
         - name: chaos-monkey
