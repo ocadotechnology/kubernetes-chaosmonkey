@@ -23,3 +23,5 @@ spec:
           env:
             - name: "CHAOS_MONKEY_KILL_FREQUENCY_SECONDS"
               value: "3600"
+      imagePullSecrets:
+      - name: registry.docker.tech.lastmile.com
