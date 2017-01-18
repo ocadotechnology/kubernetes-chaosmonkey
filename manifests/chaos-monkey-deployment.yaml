@@ -2,17 +2,16 @@ apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
   name: chaos-monkey
-  namespace: platform-automation
 spec:
   replicas: 1
   template:
     metadata:
       labels:
-        appId: chaos-monkey
+        app: chaos-monkey
     spec:
       containers:
         - name: chaos-monkey
-          image: registry.docker.tech.lastmile.com/platform-automation/chaos-monkey:latest
+          image: ocadotechnology/kubernetes-chaosmonkey:latest
           resources:
             requests:
               memory: "32Mi"
@@ -23,5 +22,3 @@ spec:
           env:
             - name: "CHAOS_MONKEY_KILL_FREQUENCY_SECONDS"
               value: "3600"
-      imagePullSecrets:
-      - name: registry.docker.tech.lastmile.com
