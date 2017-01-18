@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 import logging
+import kubernetes
 import os
-import pykube
 import random
 import time
 
@@ -13,12 +13,17 @@ logging.basicConfig(level=logging.INFO)
 
 # No error handling, if things go wrong Kubernetes will restart for us!
 
-api = pykube.HTTPClient(pykube.KubeConfig.from_service_account())
+kubernetes.config.load_incluster_config()
+v1 = kubernetes.client.CoreV1Api()
 
 while True:
-    pods = list(pykube.Pod.objects(api).filter(namespace=''))
+    pods = v1.list_pod_for_all_namespaces().items
     pod = random.choice(pods)
-    LOGGER.info("Terminating pod %s/%s", pod.namespace, pod.name)
-    pod.delete()
+    LOGGER.info("Terminating pod %s/%s", pod.metadata.namespace, pod.metadata.name)
+    v1.delete_namespaced_pod(
+        name=pod.metadata.name,
+        namespace=pod.metadata.namespace,
+        body=kubernetes.client.V1DeleteOptions(),
+    )
 
     time.sleep(KILL_FREQUENCY)
