@@ -26,6 +26,9 @@ while True:
         body=kubernetes.client.V1DeleteOptions(),
     )
     event = kubernetes.client.V1Event(
+        metadata=kubernetes.client.V1ObjectMeta(
+            name="Chaos monkey kill pod",
+        ),
         involved_object=kubernetes.client.V1ObjectReference(
             kind="Pod",
             name=pod.metadata.name,
