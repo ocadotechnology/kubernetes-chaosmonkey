@@ -25,5 +25,15 @@ while True:
         namespace=pod.metadata.namespace,
         body=kubernetes.client.V1DeleteOptions(),
     )
-
+    event = kubernetes.client.V1Event(
+        involved_object=kubernetes.client.V1ObjectReference(
+            kind="Pod",
+            name=pod.metadata.name,
+            namespace=pod.metadata.namespace,
+            uid=pod.metadata.uid,
+        ),
+        message="Pod deleted by chaos monkey",
+        type="Warning",
+    )
+    v1.create_namespaced_event(namespace=pod.metadata.namespace, body=event)
     time.sleep(KILL_FREQUENCY)
