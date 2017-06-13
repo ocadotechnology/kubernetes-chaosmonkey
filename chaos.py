@@ -44,24 +44,24 @@ while True:
         error_code = HTTPStatus(int(error_data['code']))
         if error_code == HTTPStatus.NOT_FOUND:
             new_event = kubernetes.client.V1Event(
-                metadata=kubernetes.client.V1ObjectMeta(
-                    name=event_name,
-                ),
-                source=kubernetes.client.V1EventSource(
-                    component="chaos-monkey",
-                ),
+                count=1,
                 first_timestamp=event_timestamp,
-                last_timestamp=event_timestamp,
                 involved_object=kubernetes.client.V1ObjectReference(
                     kind="Pod",
                     name=pod.metadata.name,
                     namespace=pod.metadata.namespace,
                     uid=pod.metadata.uid,
                 ),
+                last_timestamp=event_timestamp,
                 message="Pod deleted by chaos monkey",
+                metadata=kubernetes.client.V1ObjectMeta(
+                    name=event_name,
+                ),
                 reason="ChaosMonkeyDelete",
+                source=kubernetes.client.V1EventSource(
+                    component="chaos-monkey",
+                ),
                 type="Warning",
-                count=1,
             )
             v1.create_namespaced_event(namespace=pod.metadata.namespace, body=new_event)
         else:
