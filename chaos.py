@@ -5,8 +5,9 @@ import kubernetes
 import os
 import random
 import time
-import socket
+import pytz
 import json
+import datetime
 
 from kubernetes.client.rest import ApiException
 from http import HTTPStatus
@@ -32,20 +33,25 @@ while True:
         namespace=pod.metadata.namespace,
         body=kubernetes.client.V1DeleteOptions(),
     )
-
+    event_timestamp = datetime.datetime.now(pytz.utc)
     try:
         event = v1.read_namespaced_event(event_name, namespace=pod.metadata.namespace)
         event.count += 1
+        event.last_timestamp = event_timestamp
         v1.replace_namespaced_event(event_name, pod.metadata.namespace, event)
     except ApiException as e:
         error_data = json.loads(e.body)
         error_code = HTTPStatus(int(error_data['code']))
         if error_code == HTTPStatus.NOT_FOUND:
-            event = kubernetes.client.V1Event(
+            new_event = kubernetes.client.V1Event(
                 metadata=kubernetes.client.V1ObjectMeta(
                     name=event_name,
                 ),
-                source=socket.gethostname(),
+                source=kubernetes.client.V1EventSource(
+                    component="chaos-monkey",
+                ),
+                first_timestamp=event_timestamp,
+                last_timestamp=event_timestamp,
                 involved_object=kubernetes.client.V1ObjectReference(
                     kind="Pod",
                     name=pod.metadata.name,
@@ -53,8 +59,11 @@ while True:
                     uid=pod.metadata.uid,
                 ),
                 message="Pod deleted by chaos monkey",
+                reason="ChaosMonkeyDelete",
                 type="Warning",
+                count=1,
             )
-            print(event)
-            v1.create_namespaced_event(namespace=pod.metadata.namespace, body=event)
+            v1.create_namespaced_event(namespace=pod.metadata.namespace, body=new_event)
+        else:
+            raise
     time.sleep(KILL_FREQUENCY)
